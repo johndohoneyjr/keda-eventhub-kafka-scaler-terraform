@@ -1,5 +1,4 @@
 provider "azurerm" {
-  version = ">= 2.0"
   features {}
 }
 
@@ -44,12 +43,6 @@ resource "azurerm_kubernetes_cluster" "aks_app" {
     client_secret = var.service_principal_client_secret
   }
 
-  addon_profile {
-    kube_dashboard {
-      enabled = true
-    }
-  }
-
   network_profile {
     network_plugin = "azure"
   }
@@ -59,40 +52,6 @@ resource "azurerm_kubernetes_cluster" "aks_app" {
   }
 }
 
-resource "azurerm_role_assignment" "acrpull_role_aks_app" {
-  scope                            = azurerm_resource_group.rg_keda.id
-  role_definition_name             = "AcrPull"
-  principal_id                     = var.service_principal_client_id
-  skip_service_principal_aad_check = true
-}
-
-# Helm and KEDA installation
-
-provider "helm" {
-  version = ">= 0.7"
-
-  kubernetes {
-    host                   = azurerm_kubernetes_cluster.aks_app.kube_config.0.host
-    client_certificate     = base64decode(azurerm_kubernetes_cluster.aks_app.kube_config.0.client_certificate)
-    client_key             = base64decode(azurerm_kubernetes_cluster.aks_app.kube_config.0.client_key)
-    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks_app.kube_config.0.cluster_ca_certificate)
-    load_config_file       = false
-  }
-}
-
-resource "helm_release" "keda" {
-  name       = "keda"
-  repository = "https://kedacore.github.io/charts"
-  chart      = "keda"
-  namespace  = "default"
-
-  devel = "true"
-
-  set {
-    name  = "logLevel"
-    value = "debug"
-  }
-}
 
 # Event Hubs
 

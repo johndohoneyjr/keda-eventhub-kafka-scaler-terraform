@@ -28,6 +28,7 @@ output "cluster_ca_certificate" {
 
 output "cluster_username" {
   value = azurerm_kubernetes_cluster.aks_app.kube_config.0.username
+  sensitive = true
 }
 
 output "cluster_password" {
@@ -42,16 +43,22 @@ output "kube_config" {
 
 output "host" {
   value = azurerm_kubernetes_cluster.aks_app.kube_config.0.host
+   sensitive = true
 }
+
 
 # Outputs required for deploy.yaml
 
+
+
 output "eventhub_namespace_conn_string_base64encoded" {
   value = base64encode(azurerm_eventhub_namespace.hubns.default_primary_connection_string) 
+  sensitive = true
 }
 
 output "eventhub_namespace_name_base64encoded" {
   value = base64encode(azurerm_eventhub_namespace.hubns.name)
+    sensitive = true
 }
 
 output "eventhub_namespace_name" {
@@ -60,6 +67,7 @@ output "eventhub_namespace_name" {
 
 output "eventhub_consumergroup_name_base64encoded"{
   value = base64encode(azurerm_eventhub_consumer_group.group_rcvr_topic.name)
+     sensitive = true
 }
 
 output "eventhub_consumergroup_name"{
@@ -68,6 +76,7 @@ output "eventhub_consumergroup_name"{
 
 output "eventhub_name_base64encoded" {
   value = base64encode(azurerm_eventhub.rcvr_topic.name)
+    sensitive = true
 }
 
 output "eventhub_name" {

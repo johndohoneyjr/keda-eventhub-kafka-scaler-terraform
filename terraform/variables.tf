@@ -1,11 +1,11 @@
 variable "service_principal_client_id" {
   type        = string
-  description = "Client ID"
+  default     = "ClientID"
 }
 
 variable "service_principal_client_secret" {
   type        = string
-  description = "Client Secret"
+  default     = "ClientSecret"
 }
 
 variable "resource_name_prefix" {
@@ -40,7 +40,7 @@ variable cluster_name {
 variable resource_group_name {
   type        = string
   description = "Resource group name"
-  default     = "keda-rg"
+  default     = "keda-eh-rg"
 }
 
 variable location {
